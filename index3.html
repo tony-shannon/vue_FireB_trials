@@ -67,6 +67,29 @@
     var timesRef = rootRef.child('times');
     var timestamp = new Date().getTime();
     timesRef.child('timestamp').set(timestamp);
+
+    var citiesRef = rootRef.child("cities");
+    var LA = {  name: "Los Angelolos",
+                country: "USA",
+                state: "Cali"};
+    citiesRef.child('LA').set(LA);     
+
+    //var ref = firebase.database().ref();
+
+            rootRef.on("value", function(snapshot) {
+            console.log(snapshot.val());
+            }, function (error) {
+            console.log("Error: " + error.code);
+            });      
+
+            citiesRef.on("value", function(snapshot) {
+            console.log(snapshot.val());
+            }, function (error) {
+            console.log("Error: " + error.code);
+            });    
+                   
+  /*          
+*/
   </script>
   </body>
 </html>
