@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Static Template</title>
+  </head>
+  <body>
+    <h1>This is a static template, there is no bundler or bundling involved!</h1>
+  <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+  
+  <!-- Firebase App (the core Firebase SDK) is always required and must be listed first
+    <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-app.js"></script>
+   -->
+<script src="https://www.gstatic.com/firebasejs/7.8.0/firebase.js"></script>
+  
+  <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+  <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-analytics.js"></script>
+  
+  <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-firestore.js"></script>
+  <script scr="https://www.gstatic.com/firebasejs/7.8.0/firebase-database.js"></script>
+  <script>
+    // TODO: Replace the following with your app's Firebase project configuration
+    var firebaseConfig = {
+      // ...
+      apiKey: "AIzaSyASlc0TbrzHrk41PJqaolZG8mQqRmWYko0",
+      authDomain: "frectaltest2.firebaseapp.com",
+      databaseURL: "https://frectaltest2.firebaseio.com",
+      projectId: "frectaltest2",
+      storageBucket: "frectaltest2.appspot.com",
+      messagingSenderId: "911227109211",
+      appId: "1:911227109211:web:f2bc7aed9ebc3e7e9c647e"
+    };
+
+    //var firebase = require('firebase/app');
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    var db = firebase.database();
+
+    function writeUserData(userId, name, email) {
+        firebase.database().ref('users/' + userId).set({
+          username: name,
+          email: email
+        });
+      }
+    writeUserData("a1", "tonyShannon", "tonywshann@gm.com")  
+
+    var rootRef= db.ref();
+    var timesRef = rootRef.child('times');
+    var timestamp = new Date().getTime();
+    timesRef.child('timestamp').set(timestamp);
+  </script>
+  </body>
+</html>
