@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Static Template</title>
+  </head>
+  <body>
+    <h1>This is a static template #3, there is no bundler or bundling involved!</h1>
+  <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+  
+  <!-- Firebase App (the core Firebase SDK) is always required and must be listed first
+    <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-app.js"></script>
+   -->
+<script src="https://www.gstatic.com/firebasejs/7.8.0/firebase.js"></script>
+  
+  <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+  <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-analytics.js"></script>
+  
+  <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-firestore.js"></script>
+  <script scr="https://www.gstatic.com/firebasejs/7.8.0/firebase-database.js"></script>
+
+
+  <script type="text/javascript" language="javascript" src="data.js"></script> 
+  <script>
+  var user2DB= users[1];
+  console.log(user2DB.email);
+
+        console.log(users[0].email);
+        console.log(posts[3].body);
+    // TODO: Replace the following with your app's Firebase project configuration
+    var firebaseConfig = {
+      // ... 
+       apiKey: "AIzaSyB-6CWXNSu7NMOGp9P1c5zX0jyh9Km-mtA",
+        authDomain: "jsornodefsexplorer.firebaseapp.com",
+        databaseURL: "https://jsornodefsexplorer.firebaseio.com",
+        projectId: "jsornodefsexplorer",
+        storageBucket: "jsornodefsexplorer.appspot.com",
+        messagingSenderId: "933823145706",
+        appId: "1:933823145706:web:805928aa4b0fe45d2ed993"
+    };
+    /*
+    working config from index1
+      apiKey: "AIzaSyASlc0TbrzHrk41PJqaolZG8mQqRmWYko0",
+      authDomain: "frectaltest2.firebaseapp.com",
+      databaseURL: "https://frectaltest2.firebaseio.com",
+      projectId: "frectaltest2",
+      storageBucket: "frectaltest2.appspot.com",
+      messagingSenderId: "911227109211",
+      appId: "1:911227109211:web:f2bc7aed9ebc3e7e9c647e"
+
+
+    */
+
+
+
+    //var firebase = require('firebase/app');
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    var db = firebase.database();
+
+    function writeUserData(userId, name, email) {
+        firebase.database().ref('users/' + userId).set({
+          username: name,
+          email: email
+        });
+      }
+    writeUserData("a1", "tonyShannon", "tonywshann@gm.com")  
+
+    var rootRef= db.ref();
+    var timesRef = rootRef.child('times');
+    var timestamp = new Date().getTime();
+    timesRef.child('timestamp').set(timestamp);
+
+    var citiesRef = rootRef.child("cities");
+    var LA = {  name: "Los Angelolos",
+                country: "USA",
+                state: "Cali"};
+    citiesRef.child('LA').set(LA);     
+
+   // set users from data.js file
+    console.log(rootRef);
+    var users3Ref = rootRef.child('users3');
+    //var users2Ref = roofRef.child("users2");
+    users3Ref.set(users);
+
+    var postsRef = rootRef.child("posts2/");
+    postsRef.set(posts);
+
+    var commentsRef = rootRef.child("comments");
+    commentsRef.set(comments);
+
+    //var ref = firebase.database().ref();
+
+            rootRef.on("value", function(snapshot) {
+            console.log(snapshot.val());
+            }, function (error) {
+            console.log("Error: " + error.code);
+            });      
+
+            citiesRef.on("value", function(snapshot) {
+            console.log(snapshot.val());
+            }, function (error) {
+            console.log("Error: " + error.code);
+            });    
+                   
+            var usersRef = rootRef.child('users/');
+
+            usersRef.orderByChild("email").on("child_added", function(data) {
+                console.log("email a_z is " + data.val().name);
+                });
+
+
+              var ratingRef = firebase.database().ref("ratings/");
+
+                    ratingRef.orderByValue().on("value", function(data) {
+                    
+                    data.forEach(function(data) {
+                        console.log("The " + data.key + " rating is " + data.val());
+                    });
+                    
+                    });   
+
+             postsRef.orderByChild("title").limitToFirst(3).once("value").then(function(snapshot) {
+                    console.log("Top 3 Posts ordered A-Z by title are ;");
+                    snapshot.forEach(function(data) {
+                        console.log("The " + data.key + " title is " + data.val().title);
+                    });
+                    //console.log("PQ : " + JSON.stringify(data));
+              });       
+
+            postsRef.orderByChild("id").limitToFirst(3).once("value").then(function(snapshot) {
+                    console.log("Top 3 Posts ordered A-Z by ID are ;");
+                    snapshot.forEach(function(data) {
+                        console.log("Post w DB key " + data.key + " +  internal id: " + data.val().id);
+                    });
+                    //console.log("PQ : " + JSON.stringify(data));
+              });   
+
+             postsRef.orderByChild("id").equalTo(3).once("value").then(function(snapshot) {
+                    //console.log(snapshot.key);
+                    console.log("Post that matches this id is;");
+                    snapshot.forEach(function(data) {
+                        console.log("Post w DB key " + data.key + " +  internal id: " + data.val().id);
+                    });
+                    console.log(JSON.stringify(snapshot));
+                    console.log(snapshot.key);
+                    console.log("SS top key is " + Object.keys(snapshot)[0]);
+                    console.log("Matching post is " + snapshot.child("2/id").val() );
+                    if (snapshot.hasChild("2")){
+                        console.log(snapshot.child("id").toJSON);
+                    }; // true)
+                    console.log("array # is " + parseInt(Object.keys(snapshot.val()))) // complex here we get the array index from the snapshot value;
+                    idIndex= parseInt(Object.keys(snapshot.val())); //due to firebase array handling imho
+                    console.log("matchID is at " + snapshot.child(idIndex).child("id").val());           
+
+                });
+
+  /*          
+    
+
+*/
+  </script>
+  </body>
+</html>
